@@ -1,5 +1,6 @@
-import React from "react";
-import * as XLSX from "xlsx";
+import React, { useEffect } from "react";
+import XLSX from "xlsx-js-style";
+import userData from "../data";
 
 const ExportExcelWithMergedCells = () => {
   const handleExport = () => {
@@ -34,13 +35,58 @@ const ExportExcelWithMergedCells = () => {
       { s: { r: 10, c: 37 }, e: { r: 12, c: 37 } },
       { s: { r: 10, c: 38 }, e: { r: 12, c: 38 } },
       { s: { r: 10, c: 39 }, e: { r: 12, c: 39 } },
+      { s: { r: 13, c: 3 }, e: { r: 13, c: 33 } },
+      {
+        s: { r: 16 + userData.length, c: 0 },
+        e: { r: 17 + userData.length, c: 2 },
+      },
+      {
+        s: { r: 16 + userData.length, c: 3 },
+        e: { r: 16 + userData.length, c: 6 },
+      },
+      {
+        s: { r: 17 + userData.length, c: 3 },
+        e: { r: 17 + userData.length, c: 6 },
+      },
+      {
+        s: { r: 16 + userData.length, c: 8 },
+        e: { r: 16 + userData.length, c: 9 },
+      },
+      {
+        s: { r: 17 + userData.length, c: 8 },
+        e: { r: 17 + userData.length, c: 9 },
+      },
+      {
+        s: { r: 19 + userData.length, c: 0 },
+        e: { r: 20 + userData.length, c: 2 },
+      },
+      {
+        s: { r: 19 + userData.length, c: 3 },
+        e: { r: 19 + userData.length, c: 6 },
+      },
+      {
+        s: { r: 20 + userData.length, c: 3 },
+        e: { r: 20 + userData.length, c: 6 },
+      },
+      {
+        s: { r: 19 + userData.length, c: 8 },
+        e: { r: 19 + userData.length, c: 9 },
+      },
+      {
+        s: { r: 20 + userData.length, c: 8 },
+        e: { r: 20 + userData.length, c: 9 },
+      },
+      {
+        s: { r: 23 + userData.length, c: 0 },
+        e: { r: 23 + userData.length, c: 1 },
+      },
     ];
 
     for (let col = 3; col <= 33; col++) {
       merges.push({ s: { r: 8, c: col }, e: { r: 12, c: col } });
     }
 
-    const data = [
+    const baseData = [
       ["", "", "", "სამუშაო დროის აღრიცხვის ფორმა", ...Array(36).fill(null)],
       [
         "ორგანიზაციის დასახელება",
@@ -53,7 +99,7 @@ const ExportExcelWithMergedCells = () => {
       ["სტრუქტურული ერთეული", "", "", "დეველოპერები", ...Array(36).fill(null)],
       ["შედგენის თარიღი", "", "", "თებერვალი", ...Array(36).fill(null)],
       ["საანგარიშო პერიოდი", "", "", "01/02/05", ...Array(36).fill(null)],
-      Array(39).fill(null), // Corrected row to have 39 elements
+      [...Array(39).fill(null)],
       [
         "სახელი, გვარი",
         "პირადი ნომერი/ტაბელის ნომერი",
@@ -78,7 +124,55 @@ const ExportExcelWithMergedCells = () => {
         "დასვენება/ უქმე დღეებში ნამუშევარი საათების ჯამური რაოდენობა (თვე) ",
         "სხვა (საჭიროების შემთხვევაში)",
       ],
+      [...Array(39).fill(null)],
+      [...Array(39).fill(null)],
+      [
+        ...["1", "2", "3", "4"],
+        ...Array(30).fill(null),
+        ...["5", "6", "7", "8", "9", "10"],
+      ],
     ];
+
+    for (let user of userData) {
+      const userRow = [
+        user.Name,
+        user.Id,
+        user.Position,
+        ...user.days.map(
+          (day) => `${day.work_hours ? day.work_hours : day.absence_reason} `
+        ),
+        user.Day_count,
+        user.Hours,
+        user.Overtime,
+        user.Night,
+        user.Rest_days_total,
+        user.Other,
+      ];
+      baseData.push(userRow);
+    }
+
+    const additionalData = [
+      [],
+      [],
+      ["ორგანიზაციის/სტრუქტურული ქვედანაყოფის ხელმძღვანელი"],
+      ["", "", "", "გვარი, სახელი", "", "", "", "", "ხელმოწერა"],
+      [],
+      ["ორგანიზაციის/სტრუქტურული ქვედანაყოფის ხელმძღვანელი"],
+      ["", "", "", "გვარი, სახელი", "", "", "", "", "ხელმოწერა"],
+      [],
+      [],
+      ["პირობითი აღნიშვნები"],
+      ["დ", "დასვენება / უქმე დღეები"],
+      ["ა/შ", "ანაზღაურებადი შვებულება"],
+      ["უ/შ", "ანაზღაურების გარეშე შვებულება"],
+      ["დ/შ-ა", "დეკრეტული შვებულება - ანაზღაურებადი"],
+      ["დ/შ-უ", "დეკრეტული შვებულება - ანაზღაურების გარეშე"],
+      ["ს/ფ", "საავადმყოფო ფურცელი"],
+      ["გ", "გაცდენა"],
+    ];
+
+    // Combine baseData with additionalData
+    const data = [...baseData, ...additionalData];
 
     // Add the data to the worksheet first
     XLSX.utils.sheet_add_aoa(worksheet, data);
@@ -90,8 +184,92 @@ const ExportExcelWithMergedCells = () => {
       { wch: 20 },
       { wch: 20 },
       { wch: 20 },
-      ...Array(37).fill({ wch: 10 }),
+      ...Array(31).fill({ wch: 10 }),
+      ...Array(6).fill({ wch: 12 }),
     ];
+
+    // Get size of sheet
+    const range = XLSX.utils.decode_range(worksheet["!ref"] ?? "");
+    const rowCount = range.e.r;
+    const columnCount = range.e.c;
+
+    // Add formatting by looping through data in sheet
+    for (let row = 0; row <= rowCount; row++) {
+      for (let col = 0; col <= columnCount; col++) {
+        const cellRef = XLSX.utils.encode_cell({ r: row, c: col });
+
+        // Check if the cell exists before applying styles
+        if (!worksheet[cellRef]) {
+          worksheet[cellRef] = { v: "" };
+        }
+
+        // Add this format to every cell
+        worksheet[cellRef].s = {
+          alignment: {
+            horizontal: "center",
+            vertical: "center",
+            wrapText: true,
+          },
+          font: {
+            sz: 10,
+          },
+        };
+
+        // Helper function to check if a cell meets the condition
+        const isCellInBorderRange = (col, row, userDataLength) => {
+          return (
+            (col <= 39 && row <= 14 + userDataLength) ||
+            (col <= 6 &&
+              row >= 16 + userDataLength &&
+              row <= 17 + userDataLength) ||
+            (col <= 6 &&
+              row >= 19 + userDataLength &&
+              row <= 20 + userDataLength) ||
+            (col >= 8 &&
+              col <= 9 &&
+              row >= 16 + userDataLength &&
+              row <= 17 + userDataLength) ||
+            (col >= 8 &&
+              col <= 9 &&
+              row >= 19 + userDataLength &&
+              row <= 20 + userDataLength) ||
+            (col <= 1 &&
+              row >= 23 + userDataLength &&
+              row <= 32 + userDataLength)
+          );
+        };
+
+        // Applying border if cell is in range
+        if (isCellInBorderRange(col, row, userData.length)) {
+          worksheet[cellRef].s = {
+            ...worksheet[cellRef].s,
+            border: {
+              top: { style: "thin", color: { rgb: "000000" } },
+              bottom: { style: "thin", color: { rgb: "000000" } },
+              left: { style: "thin", color: { rgb: "000000" } },
+              right: { style: "thin", color: { rgb: "000000" } },
+            },
+          };
+        }
+
+        if (
+          (col <= 39 && row <= 12) ||
+          (col <= 1 &&
+            row >= 15 + userData.length &&
+            row <= 16 + userData.length) ||
+          (col <= 1 &&
+            row >= 18 + userData.length &&
+            row <= 19 + userData.length)
+        ) {
+          worksheet[cellRef].s = {
+            ...worksheet[cellRef].s,
+            font: {
+              bold: true,
+            },
+          };
+        }
+      }
+    }
 
     // Create the workbook and append the worksheet
     const workbook = XLSX.utils.book_new();
