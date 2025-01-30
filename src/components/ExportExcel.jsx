@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
 import XLSX from "xlsx-js-style";
-import userData from "../data";
+import userData from "../data.json";
+import { Button } from "react-bootstrap";
+import { RiFileExcelLine } from "react-icons/ri";
 
 const ExportExcelWithMergedCells = () => {
   const handleExport = () => {
@@ -280,9 +281,14 @@ const ExportExcelWithMergedCells = () => {
   };
 
   return (
-    <div>
-      <button onClick={handleExport}>Export Merged Table to Excel</button>
-    </div>
+    <Button
+      variant="secondary"
+      onClick={handleExport}
+      className="d-flex align-items-center gap-2 justify-content-center"
+    >
+      <RiFileExcelLine />
+      <span>ექსელის ჩამოტვირთვა</span>
+    </Button>
   );
 };
 

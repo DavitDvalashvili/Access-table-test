@@ -1,29 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Container, Table, Col } from "react-bootstrap";
-import userData from "../data";
+/* eslint-disable react/prop-types */
+import { Container } from "react-bootstrap";
+import userData from "../data.json";
 
-export const Report = () => {
-  const [range, setRange] = useState(1);
-  const [rangeDays, setRangeDays] = useState(null);
-
-  const getRangeElements = (range) => {
-    if (range === 1) {
-      setRangeDays(userData.slice(0, 10));
-    } else if (range === 2) {
-      setRangeDays(userData.slice(10, 20));
-    } else if (range === 3) {
-      setRangeDays(userData.slice(20, 30));
-    } else if (range === 4) {
-      setRangeDays(userData.slice(30, 31));
-    }
-  };
-
-  useEffect(() => {
-    getRangeElements(range);
-  }, [range]);
-
+export const Report = ({ range }) => {
   return (
-    <Container className="p-2 ">
+    <Container className="p-2">
       <table
         className="col-12"
         style={{
@@ -32,144 +13,140 @@ export const Report = () => {
       >
         <tbody>
           <tr className="text-center">
-            <td colSpan={19}>სამუშაო დროის აღრიცხვა</td>
+            <td colSpan={19} className="bg-secondary fw-bold text-white">
+              სამუშაო დროის აღრიცხვა
+            </td>
           </tr>
-          <tr className="text-center">
+          <tr className="text-center bg-secondary fw-bold text-white">
             <td colSpan={3}>ორგანიზაციის დასახელება</td>
             <td colSpan={16}>ოპერა</td>
           </tr>
-          <tr className="text-center">
+          <tr className="text-center bg-secondary fw-bold text-white">
             <td colSpan={3}>საიდენტიფიკაციო კოდი</td>
             <td colSpan={16}>02033652648</td>
           </tr>
-          <tr className="text-center">
+          <tr className="text-center bg-secondary fw-bold text-white">
             <td colSpan={3}>სტრუქტურული ერთეული</td>
             <td colSpan={16}>ოპერა</td>
           </tr>
-          <tr className="text-center">
-            <td colSpan={3}>შედგენის თარიღი</td>
-            <td colSpan={16}>01/02/2024</td>
+          <tr className=" bg-secondary fw-bold text-white">
+            <td colSpan={3} className="text-center">
+              შედგენის თარიღი
+            </td>
+            <td colSpan={16} className="text-left  text-small">
+              01/02/2024
+            </td>
           </tr>
-          <tr className="text-center">
-            <td colSpan={3}>საანგარიშო პერიოდი</td>
-            <td colSpan={16}>02/08/2024</td>
+          <tr className=" bg-secondary fw-bold text-white l">
+            <td colSpan={3} className="text-center">
+              საანგარიშო პერიოდი
+            </td>
+            <td colSpan={16} className="text-left  text-small">
+              02/08/2024
+            </td>
           </tr>
 
           <tr className="text-center">
-            <td rowSpan={5} className="col-1">
+            <td rowSpan={5} className="col-1 text-small lighter-secondary">
               გვარი, სახელი
             </td>
-            <td rowSpan={5} className="col-1">
+            <td rowSpan={5} className="col-1 text-small lighter-secondary">
               პირადი ნომერი/ტაბელის ნომერი
             </td>
-            <td rowSpan={5} className="col-1">
+            <td rowSpan={5} className="col-1 text-small lighter-secondary">
               თანამდებობა (სპეციალობა, პროფესია)
             </td>
-            <td colSpan={10} className="col-7">
+            <td colSpan={10} className="text-small lighter-secondary">
               აღნიშვნები სამუშაოზე გამოცხადების/არგამოცხადების შესახებ თარიღების
               მიხედვით თვის განმავლობაში
             </td>
-            <td colSpan={6} className="col-2">
+            <td colSpan={6} className="col-2 text-small lighter-secondary">
               სულ ნამუშევარი თვის განმავლობაში
             </td>
           </tr>
 
-          <tr className="text-center">
-            <td rowSpan={4} style={{ width: "3%" }}>
-              1
-            </td>
-            <td rowSpan={4} style={{ width: "3%" }}>
-              2
-            </td>
-            <td rowSpan={4} style={{ width: "3%" }}>
-              3
-            </td>
-            <td rowSpan={4} style={{ width: "3%" }}>
-              4
-            </td>
-            <td rowSpan={4} style={{ width: "3%" }}>
-              5
-            </td>
-            <td rowSpan={4} style={{ width: "3%" }}>
-              6
-            </td>
-            <td rowSpan={4} style={{ width: "3%" }}>
-              7
-            </td>
-            <td rowSpan={4} style={{ width: "3%" }}>
-              8
-            </td>
-            <td rowSpan={4} style={{ width: "3%" }}>
-              9
-            </td>
-            <td rowSpan={4} style={{ width: "3%" }}>
-              10
-            </td>
+          <tr>
+            {Array.from({ length: 31 }, (_, i) => i + 1)
+              .slice(
+                range === 1 ? 0 : range === 2 ? 10 : range === 3 ? 20 : 30,
+                range === 1 ? 10 : range === 2 ? 20 : range === 3 ? 30 : 31
+              )
+              .map((day, index) => (
+                <td rowSpan={4} key={index} className="text-small text-center">
+                  {day}
+                </td>
+              ))}
+            {[...Array(9)].map((_, index) =>
+              Array.from({ length: 31 }, (_, i) => i + 1).slice(
+                range === 1 ? 0 : range === 2 ? 10 : range === 3 ? 20 : 30,
+                range === 1 ? 10 : range === 2 ? 20 : range === 3 ? 30 : 31
+              ).length === 1 ? (
+                <td
+                  rowSpan={4}
+                  key={index}
+                  className="text-small text-center"
+                ></td>
+              ) : null
+            )}
           </tr>
 
           <tr className="text-center">
-            <td rowSpan={3} style={{ width: "4%" }}>
+            <td rowSpan={3} className="text-small">
               დღე
             </td>
-            <td colSpan={5}>საათი</td>
+            <td colSpan={5} className="text-small">
+              საათი
+            </td>
           </tr>
 
           <tr className="text-center">
-            <td rowSpan={2} style={{ width: "4%" }}>
+            <td rowSpan={2} className="text-small">
               ჯამი
             </td>
-            <td colSpan={4}>მათ შორის</td>
+            <td colSpan={4} className="text-small">
+              მათ შორის
+            </td>
           </tr>
 
           <tr className="text-center">
-            <td style={{ width: "3%" }}>ზეგანა კვეთური</td>
-            <td style={{ width: "4%" }}>ღამე</td>
-            <td style={{ width: "3%" }}>
+            <td className="text-small">ზეგანა კვეთური</td>
+            <td className="text-small">ღამე</td>
+            <td className="text-small">
               დასვენების დღეებში ნამუშევარი საათების რაოდენობა
             </td>
-            <td style={{ width: "3%" }}>სხვა (საჭიროების შემთხვევაში)</td>
-          </tr>
-
-          <tr className="text-center">
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-            <td>4</td>
-            <td>5</td>
-            <td>6</td>
-            <td>7</td>
-            <td>8</td>
-            <td>9</td>
-            <td>10</td>
-            <td>11</td>
-            <td>12</td>
-            <td>13</td>
-            <td>14</td>
-            <td>15</td>
-            <td>16</td>
-            <td>17</td>
-            <td>18</td>
-            <td>19</td>
+            <td className="text-small">სხვა (საჭიროების შემთხვევაში)</td>
           </tr>
 
           {userData.map((user, index) => (
-            <tr key={index}>
-              <td>{user.Name}</td>
-              <td>{user.Id}</td>
-              <td>{user.Position}</td>
-              {getRangeElements(range).map((day) => {
-                return (
-                  <td key={day.day}>
-                    {day.work_hours > 0 ? day.work_hours : day.absence_reason}
+            <tr key={index} className="text-center ">
+              <td className="text-small small_size ">{user.Name}</td>
+              <td className="text-small small_size">{user.Id}</td>
+              <td className="text-small small_size">{user.Position}</td>
+              {user.days
+                .slice(
+                  range === 1 ? 0 : range === 2 ? 10 : range === 3 ? 20 : 30,
+                  range === 1 ? 10 : range === 2 ? 20 : range === 3 ? 30 : 31
+                )
+                .map((day, index) => (
+                  <td key={index} className="text-small small_size">
+                    {day.work_hours ? day.work_hours : day.absence_reason}
                   </td>
-                );
-              })}
-              <td>{user.Day_count}</td>
-              <td>{user.Hours}</td>
-              <td>{user.Overtime}</td>
-              <td>{user.Night}</td>
-              <td>{user.Rest_days_total}</td>
-              <td>{user.Other}</td>
+                ))}
+              {[...Array(9)].map((_, index) =>
+                user.days.slice(
+                  range === 1 ? 0 : range === 2 ? 10 : range === 3 ? 20 : 30,
+                  range === 1 ? 10 : range === 2 ? 20 : range === 3 ? 30 : 31
+                ).length == 1 ? (
+                  <td key={index}></td>
+                ) : null
+              )}
+
+              <td className="text-small small_size">{user.Day_count}</td>
+              <td className="text-small small_size">{user.Hours}</td>
+              <td className="text-small small_size">{user.Overtime}</td>
+              <td className="text-small small_size">{user.Night}</td>
+              <td className="text-small small_size">{user.Rest_days_total}</td>
+              <td className="text-small small_size">{user.Other}</td>
             </tr>
           ))}
         </tbody>

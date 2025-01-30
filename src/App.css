@@ -13,3 +13,21 @@ th {
 td {
   border: 1px solid black;
 }
+
+.text-small {
+  font-size: 12px;
+}
+
+.small_size {
+  width: 3%;
+}
+
+.lighter-secondary {
+  background-color: #a3a8ac;
+  color: #fff;
+}
+
+.even-lighter-secondary {
+  background-color: #d1d9db;
+  color: #fff;
+}
