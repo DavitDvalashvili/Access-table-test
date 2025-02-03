@@ -1,37 +1,39 @@
-import { useEffect } from "react";
+import { LegacyRef, MutableRefObject, useEffect, useRef } from "react";
 import React from "react";
 
 const FacebookChat = () => {
-  useEffect(() => {
-    // Dynamically load the Facebook SDK script
-    const script = document.createElement("script");
-    script.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
-    script.async = true;
-    document.body.appendChild(script);
+  const MessengerRef = useRef<any>();
 
-    script.onload = () => {
-      // Initialize the customer chat after the script loads
+  useEffect(() => {
+    MessengerRef.current.setAttribute("page_id", "562117496982021");
+    MessengerRef.current?.setAttribute("attribution", "biz_inbox");
+
+    window.fbAsyncInit = function () {
       window.FB.init({
-        appId: "645956757760274", // Replace with your actual Facebook App ID
-        autoLogAppEvents: true,
-        xfbml: true, // Parse the XFBML (Facebook Markup Language) on the page
-        version: "v14.0", // Use the current Facebook Graph API version
+        xfbml: true,
+        version: "v16.0",
       });
     };
-
-    return () => {
-      document.body.removeChild(script); // Cleanup when component unmounts
-    };
+    (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+      (fjs.parentNode as ParentNode).insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
   }, []);
 
   return (
-    <div
-      className="fb-customerchat"
-      data-attribution="setup_tool"
-      data-page_id="562117496982021" // Replace with your actual Facebook Page ID
-      data-logged_in_greeting="Hi! How can we help you?"
-      data-logged_out_greeting="Goodbye!"
-    ></div>
+    <>
+      <div id="fb-root"></div>
+      <div
+        ref={MessengerRef}
+        id="fb-customer-chat"
+        className="fb-customerchat"
+      ></div>
+    </>
   );
 };
 
