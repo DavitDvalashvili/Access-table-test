@@ -7,6 +7,7 @@ import RangeSelector from "./components/RangeSelector";
 import FacebookChat from "./components/FacebookChat";
 
 import "./App.css";
+import FacebookMsg from "./components/FacebookMsg";
 
 function App() {
   const [range, setRange] = useState(1);
@@ -18,7 +19,7 @@ function App() {
         <RangeSelector setRange={setRange} />
       </div>
       <Report range={range} />
-      <FacebookChat />
+      <FacebookMsg />
     </>
   );
 }
