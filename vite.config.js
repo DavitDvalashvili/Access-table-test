@@ -7,4 +7,7 @@ export default defineConfig({
   optimizeDeps: {
     include: ["bootstrap/dist/css/bootstrap.min.css"],
   },
+  server: {
+    allowedHosts: ["1419-91-184-123-48.ngrok-free.app"],
+  },
 });
