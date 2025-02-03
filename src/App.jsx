@@ -4,10 +4,9 @@ import ExportExcel from "./components/ExportExcel";
 import { Report } from "./components/Report";
 import { useState } from "react";
 import RangeSelector from "./components/RangeSelector";
-import FacebookMsg from "./components/FacebookMsg";
+import FacebookChat from "./components/FacebookChat";
 
 import "./App.css";
-//import FacebookMsg from "./components/FacebookMsg";
 
 function App() {
   const [range, setRange] = useState(1);
@@ -19,7 +18,7 @@ function App() {
         <RangeSelector setRange={setRange} />
       </div>
       <Report range={range} />
-      <FacebookMsg />
+      <FacebookChat />
     </>
   );
 }
